@@ -25,7 +25,7 @@ def combined_data():
         "NetworkInfo": network_info,
         "PeerInfo": peer_info
     }
-
+    print(quil_metrics)
     # Return the combined data as JSON
     #return jsonify(quil_metrics)
 
@@ -46,10 +46,14 @@ def format_to_prometheus(data, prefix="", labels={}):
             output.extend(format_to_prometheus(value, new_prefix, labels))
 
     elif isinstance(data, list):
-        for index, item in enumerate(data):
-            new_labels = labels.copy()
-            new_labels["index"] = str(index)
-            output.extend(format_to_prometheus(item, prefix, new_labels))
+        if prefix and "index" not in labels:  # Only add index label if the list is nested directly inside a dictionary
+            for index, item in enumerate(data):
+                new_labels = labels.copy()
+                new_labels["index"] = str(index)
+                output.extend(format_to_prometheus(item, prefix, new_labels))
+        else:
+            for item in data:
+                output.extend(format_to_prometheus(item, prefix, labels))
 
     elif isinstance(data, (str, int, float, bool)):
         label_str = ",".join([f'{k}="{v}"' for k, v in labels.items()]) if labels else ""
