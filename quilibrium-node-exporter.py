@@ -35,14 +35,14 @@ def combined_data():
     # Return the formatted data with the appropriate content type
     return Response(prometheus_data, content_type="text/plain")
 
-
 def format_to_prometheus(data, prefix="", labels={}):
     """Recursively format JSON data to Prometheus text format."""
     output = []
 
     if isinstance(data, dict):
         for key, value in data.items():
-            new_prefix = f"{prefix}_{key}" if prefix else key
+            # Check if the child key string matches the parent key string and remove the child key string if it's an exact match
+            new_prefix = prefix if prefix.lower() == key.lower() else f"{prefix}_{key}" if prefix else key
             output.extend(format_to_prometheus(value, new_prefix, labels))
 
     elif isinstance(data, list):
