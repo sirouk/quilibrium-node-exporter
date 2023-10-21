@@ -3,7 +3,7 @@ import subprocess
 import json
 
 # Define the endpoint variable at the top
-NODE_ENDPOINT = "http://127.0.0.1:8417/quilibrium.node.node.pb.NodeService"
+NODE_ENDPOINT = "http://127.0.0.1:8379/quilibrium.node.node.pb.NodeService"
 
 app = Flask(__name__)
 
