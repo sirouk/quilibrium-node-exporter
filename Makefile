@@ -20,8 +20,8 @@ endif
 
 check:
 	cd ${SOURCE_PATH}
-	ls -lhat
-	curl 127.0.0.1:8380/metrics | jq
+	ls 
+	curl 127.0.0.1:8380/metrics 
 
 
 install:
