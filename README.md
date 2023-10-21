@@ -1,6 +1,6 @@
 # Quilibrium Node Exporter
 
-This Quilibrium metrics exporter is a tool that should simplify the task of exposing metrics from your Quilibrium network node for consumption by Prometheus. This is a basic start, but will eventually provide robust data to help you monitor node health, performance, and other vital statistics when paired with Grafana.
+This Quilibrium metrics exporter is a tool that should simplify the task of exposing metrics from your Quilibrium network node for consumption by Prometheus. This is a basic start, but will eventually provide robust data to help you monitor node health, performance, and other vital statistics.
 
 I will continue to add additional metrics as they become available. Eventually, I will add a Grafana template. 
 
