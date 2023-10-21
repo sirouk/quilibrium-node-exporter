@@ -58,7 +58,7 @@ def format_to_prometheus(data, prefix="", labels={}):
     elif isinstance(data, (str, int, float, bool)):
         label_str = ",".join([f'{k}="{v}"' for k, v in labels.items()]) if labels else ""
         label_part = "{" + label_str + "}" if label_str else ""
-        metric = f"{prefix}{label_part} {data}"
+        metric = f"Quilibrium_{prefix}{label_part} {data}"
         output.append(metric)
 
     return output
