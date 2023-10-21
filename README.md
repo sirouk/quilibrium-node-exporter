@@ -36,6 +36,18 @@ I will continue to add additional metrics as they become available. Feel free to
 
 ## Usage
 
+3. Expost the Quilibrium REST API:
+
+   Edit your Quilibrium node config:
+   ```bash
+   nano /path/to/quilibrium/ceremonyclient/node/.config/config.yml
+   ```
+
+   Add to the bottom or edit an existing entry, and save:
+   ```
+   listenRESTMultiaddr: /ip4/127.0.0.1/tcp/8379
+   ```
+
 3. Start the exporter:
 
    ```bash
