@@ -35,31 +35,30 @@ def combined_data():
     # Return the formatted data with the appropriate content type
     return Response(prometheus_data, content_type="text/plain")
 
-def format_to_prometheus(data, prefix="", labels={}):
-    """Recursively format JSON data to Prometheus text format."""
+def format_to_prometheus(data):
+    """Format data to Prometheus text format ensuring non-repetitive key names."""
     output = []
 
-    if isinstance(data, dict):
-        for key, value in data.items():
-            # Check if the child key string matches the parent key string and remove the child key string if it's an exact match
-            new_prefix = prefix if prefix.lower() == key.lower() else f"{prefix}_{key}" if prefix else key
-            output.extend(format_to_prometheus(value, new_prefix, labels))
-
-    elif isinstance(data, list):
-        if prefix and "index" not in labels:  # Only add index label if the list is nested directly inside a dictionary
-            for index, item in enumerate(data):
-                new_labels = labels.copy()
-                new_labels["index"] = str(index)
-                output.extend(format_to_prometheus(item, prefix, new_labels))
-        else:
-            for item in data:
-                output.extend(format_to_prometheus(item, prefix, labels))
-
-    elif isinstance(data, (str, int, float, bool)):
-        label_str = ",".join([f'{k}="{v}"' for k, v in labels.items()]) if labels else ""
-        label_part = "{" + label_str + "}" if label_str else ""
-        metric = f"Quilibrium_{prefix}{label_part} {data}"
-        output.append(metric)
+    for main_key, main_value in data.items():
+        if isinstance(main_value, dict):
+            for sub_key, sub_value in main_value.items():
+                if isinstance(sub_value, list):
+                    for index, item in enumerate(sub_value):
+                        labels = {}
+                        # Avoid extending the key name with the same value
+                        metric_name = f"Quilibrium_{main_key}" if main_key.lower() == sub_key.lower() else f"Quilibrium_{main_key}_{sub_key}"
+                        
+                        for key, value in item.items():
+                            # Check if the value is an integer or an integer represented as a string
+                            if isinstance(value, int) or (isinstance(value, str) and value.isdigit()):
+                                # Combine the base metric name with the current key to create a unique metric name
+                                complete_metric_name = metric_name + f"_{key}"
+                                label_str = ",".join([f'{k}="{v}"' for k, v in labels.items()])
+                                label_part = "{" + label_str + "}" if label_str else ""
+                                metric = f"{complete_metric_name}{label_part} {int(value)}"
+                                output.append(metric)
+                            else:
+                                labels[key] = value
 
     return output
 
