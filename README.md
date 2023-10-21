@@ -107,6 +107,12 @@ I will continue to add additional metrics as they become available. Feel free to
 
 5. Visualize the metrics in Grafana by connecting them to your Prometheus data source and creating custom dashboards.
 
+## Related Quilibrium community developments
+
+   Another community member build a handy Quilibrium rust client:
+   https://github.com/agostbiro/quilibrium-rs/tree/main/crates/quilclient
+
+
 ## Contributing
 
 I love contributions! Feel free to 
