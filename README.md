@@ -1,6 +1,6 @@
 # Quilibrium Node Exporter
 
-Quilibrium Metrics Exporter for Prometheus provides access to your Quilibrium network node by exposing essential metrics to Prometheus. This enables node operators to monitor node health, performance, and other vital statistics. 
+Quilibrium Metrics Exporter for Prometheus provides access to your Quilibrium network node by exposing essential metrics to Prometheus. This should help make the job of monitoring your node health, performance, and other vital statistics much easier.
 
 I will continue to add additional metrics as they become available. Feel free to open an issue for suggestions!
 
