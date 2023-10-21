@@ -116,8 +116,8 @@ I will continue to add additional metrics as they become available. Feel free to
 
 ## Contributing
 
-I love contributions! Feel free to 
+I love contributions! Feel free to open an issue or submit a PR!
 
 ## License
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for more details.
+This project is licensed under the MIT License.
