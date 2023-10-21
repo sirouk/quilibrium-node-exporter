@@ -26,7 +26,7 @@ Feel free to contribute!
 
    ```bash
    cd ~
-   git clone https://github.com/YourUsername/quilibrium-node-exporter
+   git clone https://github.com/sirouk/quilibrium-node-exporter
    
    ```
 
