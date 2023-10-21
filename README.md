@@ -1,21 +1,24 @@
 # Quilibrium Node Exporter
 
-Quilibrium Metrics Exporter for Prometheus provides access to your Quilibrium network node by exposing essential metrics to Prometheus. This should help make the job of monitoring your node health, performance, and other vital statistics much easier.
+This Quilibrium metrics exporter is a tool that should simplify the task of exposing metrics from your Quilibrium network node for consumption by Prometheus. This is a basic start, but will eventually provide robust data to help you monitor node health, performance, and other vital statistics when paired with Grafana.
 
-I will continue to add additional metrics as they become available. Feel free to open an issue for suggestions!
+I will continue to add additional metrics as they become available. Eventually, I will add a Grafana template. 
+
+Feel free to contribute!
+
 
 ## Features
 
 - Designed to work out-of-the-box with the latest release of Quilibrium node
-- Gathers detailed metrics from the Quilibrium node, including peer information, network status, and more.
-- Suitable for monitoring individual nodes.
+- Gathers detailed metrics from the Quilibrium node into a single call
+- Suitable for monitoring an individual node
 
 ## Prerequisites
 
 - Python 3.x
 - Flask
 - A running instance of Quilibrium network node with REST endpoint exposed (locally)
-- Prometheus & Grafana (for visualization, steps and template will be added later)
+- Prometheus (Grafana details will be added later for consuming Prometheus and providing visualization)
 
 ## Installation
 
