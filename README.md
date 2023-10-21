@@ -110,6 +110,7 @@ I will continue to add additional metrics as they become available. Feel free to
 ## Related Quilibrium community developments
 
    Another community member build a handy Quilibrium rust client:
+   
    https://github.com/agostbiro/quilibrium-rs/tree/main/crates/quilclient
 
 
