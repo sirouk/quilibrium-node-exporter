@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, Response
 import subprocess
 import json
 
@@ -7,10 +7,12 @@ NODE_ENDPOINT = "http://127.0.0.1:8379/quilibrium.node.node.pb.NodeService"
 
 app = Flask(__name__)
 
+
 def fetch_data(command):
     """Helper function to fetch data using curl command."""
     result = subprocess.run(command, capture_output=True, text=True)
     return json.loads(result.stdout)
+
 
 @app.route('/metrics')
 def combined_data():
@@ -25,7 +27,38 @@ def combined_data():
     }
 
     # Return the combined data as JSON
-    return jsonify(quil_metrics)
+    #return jsonify(quil_metrics)
+
+    # Format the data for Prometheus
+    prometheus_data = "\n".join(format_to_prometheus(quil_metrics))
+
+    # Return the formatted data with the appropriate content type
+    return Response(prometheus_data, content_type="text/plain")
+
+
+def format_to_prometheus(data, prefix="", labels={}):
+    """Recursively format JSON data to Prometheus text format."""
+    output = []
+
+    if isinstance(data, dict):
+        for key, value in data.items():
+            new_prefix = f"{prefix}_{key}" if prefix else key
+            output.extend(format_to_prometheus(value, new_prefix, labels))
+
+    elif isinstance(data, list):
+        for index, item in enumerate(data):
+            new_labels = labels.copy()
+            new_labels["index"] = str(index)
+            output.extend(format_to_prometheus(item, prefix, new_labels))
+
+    elif isinstance(data, (str, int, float, bool)):
+        label_str = ",".join([f'{k}="{v}"' for k, v in labels.items()]) if labels else ""
+        label_part = "{" + label_str + "}" if label_str else ""
+        metric = f"{prefix}{label_part} {data}"
+        output.append(metric)
+
+    return output
+
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8380)
