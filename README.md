@@ -9,7 +9,7 @@ Feel free to contribute!
 
 ## Features
 
-- Designed to work out-of-the-box with the latest release of Quilibrium node
+- Designed to work out-of-the-box with the latest release of [Quilibrium node] (https://github.com/quilibriumnetwork/ceremonyclient)
 - Gathers detailed metrics from the Quilibrium node into a single call
 - Suitable for monitoring an individual node
 
