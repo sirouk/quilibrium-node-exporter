@@ -38,7 +38,7 @@ install:
 	fi
 
 
-update: git-setup
+update: install
 	cd ${REPO_PATH}
 	git pull
 
