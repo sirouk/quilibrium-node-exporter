@@ -1,8 +1,10 @@
+import os
 from flask import Flask, jsonify, Response
 import subprocess
 import json
 
-# Define the endpoint variable at the top
+
+FRAME_FILE = "last_reported_frame"
 NODE_ENDPOINT = "http://127.0.0.1:8379/quilibrium.node.node.pb.NodeService"
 
 app = Flask(__name__)
@@ -13,19 +15,93 @@ def fetch_data(command):
     result = subprocess.run(command, capture_output=True, text=True)
     return json.loads(result.stdout)
 
+def get_last_frame():
+    if os.path.exists(FRAME_FILE):
+        with open(FRAME_FILE, 'r') as file:
+            return int(file.read().strip())
+    return get_peer_max_frame()
+
+def set_next_frame(frame_number):
+    with open(FRAME_FILE, 'w') as file:
+        file.write(str(frame_number))
+
+def get_peer_max_frame():
+    peer_info = fetch_data(['curl', '-sX', 'POST', f'{NODE_ENDPOINT}/GetPeerInfo'])
+    max_frames = 0
+    for peer in peer_info.get('peerInfo'):
+        peer_mf = int(peer.get('maxFrame', 0))
+        if peer_mf > max_frames:
+            max_frames = peer_mf
+    return max_frames
+
+def fetch_frame_data(from_frame, to_frame):
+    command = [
+        'curl', '-sX', 'POST', f'{NODE_ENDPOINT}/GetFrames',
+        '-H', 'Content-Type: application/json',
+        '-d', f'{{"from_frame_number":{from_frame}, "to_frame_number":{to_frame}, "include_candidates": true}}'
+    ]
+    #print(command)
+    result = subprocess.run(command, capture_output=True, text=True)
+    return json.loads(result.stdout)
+
+def get_latest_frame():
+    last_frame = get_last_frame()
+    last_data = []
+    direction = -1  # start by going backwards
+
+    while True:
+        from_frame = last_frame
+        to_frame = last_frame + 1
+
+        #print(f"Trying frame: {to_frame}")
+
+        # fetching data
+        data = fetch_frame_data(from_frame, to_frame)
+        #print("Data:")
+        #print(data)
+
+        frame_exists = data.get('truncatedClockFrames') and \
+                       data['truncatedClockFrames'][0].get('frameNumber')
+
+        # If frame doesn't exist and we're going backwards
+        if not frame_exists and direction == -1:
+            last_frame += direction
+
+        # If frame exists and we're going backwards
+        elif frame_exists and direction == -1:
+            direction = 1  # change direction to forwards
+            last_data = data  # update last_data
+            last_frame += direction
+
+        # If frame exists and we're going forwards
+        elif frame_exists and direction == 1:
+            last_data = data  # update last_data
+            last_frame += direction
+
+        # If frame doesn't exist and we're going forwards
+        elif not frame_exists and direction == 1:
+            break
+
+    # Update the file to contain the next frame pointer
+    set_next_frame(from_frame)
+    return last_data
+
 
 @app.route('/metrics')
 def combined_data():
     # Use the NODE_ENDPOINT variable in the curl commands
-    network_info = fetch_data(['curl', '-X', 'POST', f'{NODE_ENDPOINT}/GetNetworkInfo'])
-    peer_info = fetch_data(['curl', '-X', 'POST', f'{NODE_ENDPOINT}/GetPeerInfo'])
+    latest_frame = get_latest_frame()
+    network_info = fetch_data(['curl', '-sX', 'POST', f'{NODE_ENDPOINT}/GetNetworkInfo'])
+    peer_info = fetch_data(['curl', '-sX', 'POST', f'{NODE_ENDPOINT}/GetPeerInfo'])
 
     # Combine the data
     quil_metrics = {
+	"LatestFrame": latest_frame,
         "NetworkInfo": network_info,
         "PeerInfo": peer_info
     }
-    print(quil_metrics)
+    #print(quil_metrics)
+
     # Return the combined data as JSON
     #return jsonify(quil_metrics)
 
