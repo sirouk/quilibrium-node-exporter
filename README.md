@@ -73,28 +73,24 @@ Feel free to contribute!
    ```
       cd ~/quilibrium-node-exporter
       ls
-      exporter.log  Makefile  quilibrium-node-exporter.py  README.md
-      curl 127.0.0.1:8380/metrics | jq
-        % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                       Dload  Upload   Total   Spent    Left  Speed
-      100 59906  100 59906    0     0  3265k      0 --:--:-- --:--:-- --:--:-- 3656k
-      {
-        "NetworkInfo": {
-          "networkInfo": [
-            {
-              "multiaddrs": [
-                "/ip4/51.81.214.68/udp/8336/quic"
-              ],
-              "peerId": "EiB89GnA0DEEes4RXAyLBJesXJSYjplUSkgpTNaoWBLsEw==",
-              "peerScore": 0
-            },
-            {
-              "multiaddrs": [
-                "/ip4/147.135.105.209/udp/8336/quic"
-              ],
-              "peerId": "EiDyQ/H+unN8ABzy3jMO8AXqqRWMkdpp9S5Qo5KxsRk0yA==",
-              "peerScore": 0
-            },
+      exporter.log  grafana  Makefile  next_frame_number  quilibrium-node-exporter.py  README.md
+      curl 127.0.0.1:8380/metrics
+      Quilibrium_LatestFrame_truncatedClockFrames_frameNumber{filter="NAAb50MsLmZpraAnl4hoKrn2JnGxtTirmVBGlNmBy9M="} 20340
+      Quilibrium_LatestFrame_truncatedClockFrames_timestamp{filter="NAAb50MsLmZpraAnl4hoKrn2JnGxtTirmVBGlNmBy9M="} 1697517372546
+      Quilibrium_LatestFrame_truncatedClockFrames_difficulty{filter="NAAb50MsLmZpraAnl4hoKrn2JnGxtTirmVBGlNmBy9M="} 10000
+      ...
+      Quilibrium_NetworkInfo_peerScore{peerId="EiDBqssLUs550bRROG5rT7Gh2ZSUD3yJt1sG+cR+KfEJbw==",multiaddrs="['/ip4/23.139.82.67/udp/8336/quic']"} 0
+      Quilibrium_NetworkInfo_peerScore{peerId="EiDDuejVIWjWB2EkgmzmTMXS0sWKWASp2xbiZ/w048hgLg==",multiaddrs="['/ip4/147.135.105.14/udp/8336/quic']"} 0
+      Quilibrium_NetworkInfo_peerScore{peerId="EiDLg4I2+SAV7f0dUfT/qwDJWAstv1CAYmbhvJG3LxrgZw==",multiaddrs="['/ip4/65.109.17.13/udp/8336/quic']"} 0
+      Quilibrium_NetworkInfo_peerScore{peerId="EiB+FoAYEbJ0RVI9L1rjxelLzUrbaHP1aOn/SQBbuVTFrA==",multiaddrs="['/ip4/65.109.17.24/udp/8336/quic']"} 0
+      ...
+      Quilibrium_PeerInfo_maxFrame{peerId="EiCgtRXQ+69xr3xSexZjmmBo9as5fmdXfeMAmee0LSRhHA==",multiaddrs="['']"} 0
+      Quilibrium_PeerInfo_maxFrame{peerId="EiCtKApm4Z9at1keNK+D9G+qtcZjcmOYorFsIdgBP4jxMQ==",multiaddrs="['']"} 0
+      Quilibrium_PeerInfo_maxFrame{peerId="EiAjhP9B5faB5+2IZI2cSm+FPfw9pfB7SL7AYDGlK4h4AQ==",multiaddrs="['/ip4/95.217.131.173/udp/8336/quic']"} 0
+      Quilibrium_PeerInfo_maxFrame{peerId="EiDhS3+6Vc3SaMdJpYtrX5fnRS5ZRDEfF8vx+iOwWIO6Bw==",multiaddrs="['/ip4/167.235.142.205/udp/8336/quic']"} 224
+      Quilibrium_PeerInfo_maxFrame{peerId="EiDZobodlnDZ/nNPhlDlw29XUQlevuKLopzM4rsMC7keCA==",multiaddrs="['/ip4/13.236.219.103/udp/8317/quic']"} 15487
+      ...
+      Quilibrium_PeerInfo_uncooperativePeerInfo_maxFrame{peerId="EiC3Kzc7YMFvjTQJNRzg3epEfqa2pf0HBUi7mO6/r4g0aw==",multiaddrs="['']"} 21950
       ...
    ```
 
