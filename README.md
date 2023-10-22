@@ -106,7 +106,7 @@ Feel free to contribute!
 
 5. Visualize the metrics in Grafana by connecting them to your Prometheus data source and creating custom dashboards.
 
-   Configure Grafana and import the JSON located in this repo under `/grafana`
+   Configure Grafana with a Prometheus datasource URL of `http://localhost:9090` and import the JSON located in this repo under `/grafana` for a copy of the Quilibrium Network Dashboard.
 
 ## Related Quilibrium community developments
 
