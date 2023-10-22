@@ -28,6 +28,7 @@ install:
 	cd ${SOURCE_PATH}
 	sudo apt install -y python3 python3-pip jq
 	pip3 install flask
+	pip3 install base58
 
 	@if [ ! -d ${REPO_PATH} ]; then \
 		mkdir -p ${REPO_PATH} && cd ${REPO_PATH} && git clone https://github.com/${GIT_ORG}/${GIT_REPO} .; \
