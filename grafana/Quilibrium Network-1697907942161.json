@@ -776,7 +776,7 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "d2e5166c-2bed-4e88-bcc3-60c8878bb075"
+          "name":"Prometheus"
         },
         "definition": "label_values(peerId)",
         "hide": 0,
@@ -803,7 +803,7 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "d2e5166c-2bed-4e88-bcc3-60c8878bb075"
+          "name":"Prometheus"
         },
         "definition": "label_values(multiaddrs)",
         "hide": 0,
