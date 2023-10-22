@@ -1,4 +1,6 @@
 import os
+import base64
+import base58
 from flask import Flask, jsonify, Response
 import subprocess
 import json
@@ -11,9 +13,15 @@ app = Flask(__name__)
 
 
 def fetch_data(command):
-    """Helper function to fetch data using curl command."""
     result = subprocess.run(command, capture_output=True, text=True)
     return json.loads(result.stdout)
+
+def is_valid_base64(input_string):
+    try:
+        decoded_string = base64.b64decode(input_string, validate=True)
+        return True
+    except Exception as e:
+        return False
 
 def get_last_frame():
     if os.path.exists(FRAME_FILE):
@@ -123,16 +131,27 @@ def format_to_prometheus(data):
                         labels = {}
                         # Avoid extending the key name with the same value
                         metric_name = f"Quilibrium_{main_key}" if main_key.lower() == sub_key.lower() else f"Quilibrium_{main_key}_{sub_key}"
-                        
+
                         for key, value in item.items():
+
+                            # Check if the key is "peerId"
+                            if key == "peerId" and is_valid_base64(value):
+                                # Base64 decode the value
+                                decoded_bytes = base64.b64decode(value)
+                                # Base58 encode the decoded bytes
+                                encoded_peerId = base58.b58encode(decoded_bytes).decode('utf-8')
+                                # Update the labels dictionary with the newly encoded value
+                                labels[key] = encoded_peerId
+
                             # Check if the value is an integer or an integer represented as a string
-                            if isinstance(value, int) or (isinstance(value, str) and value.isdigit()):
+                            elif isinstance(value, int) or (isinstance(value, str) and value.isdigit()):
                                 # Combine the base metric name with the current key to create a unique metric name
                                 complete_metric_name = metric_name + f"_{key}"
                                 label_str = ",".join([f'{k}="{v}"' for k, v in labels.items()])
                                 label_part = "{" + label_str + "}" if label_str else ""
                                 metric = f"{complete_metric_name}{label_part} {int(value)}"
                                 output.append(metric)
+
                             else:
                                 labels[key] = value
 
