@@ -4,7 +4,7 @@ import subprocess
 import json
 
 
-FRAME_FILE = "last_reported_frame"
+FRAME_FILE = "next_frame_number"
 NODE_ENDPOINT = "http://127.0.0.1:8379/quilibrium.node.node.pb.NodeService"
 
 app = Flask(__name__)
