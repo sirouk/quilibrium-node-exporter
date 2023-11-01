@@ -9,6 +9,9 @@ import json
 FRAME_FILE = "next_frame_number"
 NODE_ENDPOINT = "http://127.0.0.1:8379/quilibrium.node.node.pb.NodeService"
 
+base58_keys = ["peerId"]
+bigEndianKeys = ["unconfirmedTokenSupply", "confirmedTokenSupply", "ownedTokens"]
+
 app = Flask(__name__)
 
 
@@ -101,12 +104,14 @@ def combined_data():
     latest_frame = get_latest_frame()
     network_info = fetch_data(['curl', '-sX', 'POST', f'{NODE_ENDPOINT}/GetNetworkInfo'])
     peer_info = fetch_data(['curl', '-sX', 'POST', f'{NODE_ENDPOINT}/GetPeerInfo'])
-
+    token_info = fetch_data(['curl', '-sX', 'POST', f'{NODE_ENDPOINT}/GetTokenInfo'])
+    
     # Combine the data
     quil_metrics = {
-	"LatestFrame": latest_frame,
+	    "LatestFrame": latest_frame,
         "NetworkInfo": network_info,
-        "PeerInfo": peer_info
+        "PeerInfo": peer_info,
+        "TokenInfo": {"tokenInfo": [token_info]}
     }
     #print(quil_metrics)
 
@@ -133,9 +138,23 @@ def format_to_prometheus(data):
                         metric_name = f"Quilibrium_{main_key}" if main_key.lower() == sub_key.lower() else f"Quilibrium_{main_key}_{sub_key}"
 
                         for key, value in item.items():
+                            #print(value)
 
-                            # Check if the key is "peerId"
-                            if key == "peerId" and is_valid_base64(value):
+                            if key in bigEndianKeys and is_valid_base64(value):
+                                 # Base64 decode the value
+                                decoded_bytes = base64.b64decode(value)
+
+                                # Convert the value to big endian
+                                value = int.from_bytes(decoded_bytes, byteorder='big')
+
+                                # Combine the base metric name with the current key to create a unique metric name
+                                complete_metric_name = metric_name + f"_{key}"
+                                label_str = ",".join([f'{k}="{v}"' for k, v in labels.items()])
+                                label_part = "{" + label_str + "}" if label_str else ""
+                                metric = f"{complete_metric_name}{label_part} {int(value)}"
+                                output.append(metric)
+
+                            elif key in base58_keys and is_valid_base64(value):
                                 # Base64 decode the value
                                 decoded_bytes = base64.b64decode(value)
                                 # Base58 encode the decoded bytes
@@ -159,4 +178,4 @@ def format_to_prometheus(data):
 
 
 if __name__ == '__main__':
-    app.run(host='127.0.0.1', port=8380)
+    app.run(host='127.0.0.1', port=8381)
