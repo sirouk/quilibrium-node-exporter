@@ -655,7 +655,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 7,
         "w": 20,
         "x": 3,
         "y": 22
@@ -815,10 +815,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 6,
+        "h": 7,
         "w": 20,
         "x": 3,
-        "y": 30
+        "y": 29
       },
       "id": 14,
       "options": {
@@ -853,12 +853,173 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "name":"Prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-YlRd"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "locale"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 3,
+        "x": 0,
+        "y": 36
+      },
+      "id": 16,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "10.1.5",
+      "targets": [
+        {
+          "datasource": {
+            "name": "Prometheus",
+            "type": "prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "Quilibrium_TokenInfo_ownedTokens / 8000000000",
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Owned Quil",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "name":"Prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-YlRd"
+          },
+          "custom": {
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisGridShow": true,
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "log": 2,
+              "type": "log"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 20,
+        "x": 3,
+        "y": 36
+      },
+      "id": 17,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": false
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "name": "Prometheus",
+            "type": "prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "Quilibrium_TokenInfo_ownedTokens / 8000000000",
+          "instant": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Owned Quil Tokens",
+      "transparent": true,
+      "type": "timeseries"
+    },
+    {
       "collapsed": false,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 36
+        "y": 44
       },
       "id": 8,
       "panels": [],
@@ -952,7 +1113,7 @@
         "h": 10,
         "w": 23,
         "x": 0,
-        "y": 37
+        "y": 45
       },
       "id": 2,
       "options": {
@@ -1050,7 +1211,7 @@
         "h": 10,
         "w": 23,
         "x": 0,
-        "y": 47
+        "y": 55
       },
       "id": 3,
       "options": {
@@ -1155,6 +1316,6 @@
   "timezone": "",
   "title": "Quilibrium Network",
   "uid": "a0335ec6-f97e-4c46-a098-2d0c0d8022c3",
-  "version": 15,
+  "version": 19,
   "weekStart": ""
 }
