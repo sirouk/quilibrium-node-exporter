@@ -76,23 +76,19 @@ Feel free to contribute!
       ls
       exporter.log  grafana  Makefile  next_frame_number  quilibrium-node-exporter.py  README.md
       curl 127.0.0.1:8380/metrics
-      Quilibrium_LatestFrame_truncatedClockFrames_frameNumber{filter="NAAb50MsLmZpraAnl4hoKrn2JnGxtTirmVBGlNmBy9M="} 20340
-      Quilibrium_LatestFrame_truncatedClockFrames_timestamp{filter="NAAb50MsLmZpraAnl4hoKrn2JnGxtTirmVBGlNmBy9M="} 1697517372546
+      Quilibrium_LatestFrame_truncatedClockFrames_frameNumber{filter="NAAb50MsLmZpraAnl4hoKrn2JnGxtTirmVBGlNmBy9M="} 37414
+      Quilibrium_LatestFrame_truncatedClockFrames_timestamp{filter="NAAb50MsLmZpraAnl4hoKrn2JnGxtTirmVBGlNmBy9M="} 1697364469374
       Quilibrium_LatestFrame_truncatedClockFrames_difficulty{filter="NAAb50MsLmZpraAnl4hoKrn2JnGxtTirmVBGlNmBy9M="} 10000
       ...
-      Quilibrium_NetworkInfo_peerScore{peerId="EiDBqssLUs550bRROG5rT7Gh2ZSUD3yJt1sG+cR+KfEJbw==",multiaddrs="['/ip4/23.139.82.67/udp/8336/quic']"} 0
-      Quilibrium_NetworkInfo_peerScore{peerId="EiDDuejVIWjWB2EkgmzmTMXS0sWKWASp2xbiZ/w048hgLg==",multiaddrs="['/ip4/147.135.105.14/udp/8336/quic']"} 0
-      Quilibrium_NetworkInfo_peerScore{peerId="EiDLg4I2+SAV7f0dUfT/qwDJWAstv1CAYmbhvJG3LxrgZw==",multiaddrs="['/ip4/65.109.17.13/udp/8336/quic']"} 0
-      Quilibrium_NetworkInfo_peerScore{peerId="EiB+FoAYEbJ0RVI9L1rjxelLzUrbaHP1aOn/SQBbuVTFrA==",multiaddrs="['/ip4/65.109.17.24/udp/8336/quic']"} 0
+      Quilibrium_NetworkInfo_peerScore{peerId="QmdYYNKRvZYThJ7tP2A3RHfed3xrazNBiSLUrDnqNr83EZ",multiaddrs="['/ip4/198.98.109.189/udp/8336/quic']"} 100
       ...
-      Quilibrium_PeerInfo_maxFrame{peerId="EiCgtRXQ+69xr3xSexZjmmBo9as5fmdXfeMAmee0LSRhHA==",multiaddrs="['']"} 0
-      Quilibrium_PeerInfo_maxFrame{peerId="EiCtKApm4Z9at1keNK+D9G+qtcZjcmOYorFsIdgBP4jxMQ==",multiaddrs="['']"} 0
-      Quilibrium_PeerInfo_maxFrame{peerId="EiAjhP9B5faB5+2IZI2cSm+FPfw9pfB7SL7AYDGlK4h4AQ==",multiaddrs="['/ip4/95.217.131.173/udp/8336/quic']"} 0
-      Quilibrium_PeerInfo_maxFrame{peerId="EiDhS3+6Vc3SaMdJpYtrX5fnRS5ZRDEfF8vx+iOwWIO6Bw==",multiaddrs="['/ip4/167.235.142.205/udp/8336/quic']"} 224
-      Quilibrium_PeerInfo_maxFrame{peerId="EiDZobodlnDZ/nNPhlDlw29XUQlevuKLopzM4rsMC7keCA==",multiaddrs="['/ip4/13.236.219.103/udp/8317/quic']"} 15487
+      Quilibrium_PeerInfo_maxFrame{peerId="QmZfPwUNk3hFSVRvMtijqxBYkxmrPix2Zd7gbZdZQe65Dp",multiaddrs="['/ip4/147.135.62.9/udp/8336/quic']"} 209
+      Quilibrium_PeerInfo_timestamp{peerId="QmZfPwUNk3hFSVRvMtijqxBYkxmrPix2Zd7gbZdZQe65Dp",multiaddrs="['/ip4/147.135.62.9/udp/8336/quic']"} 1699245754932
       ...
-      Quilibrium_PeerInfo_uncooperativePeerInfo_maxFrame{peerId="EiC3Kzc7YMFvjTQJNRzg3epEfqa2pf0HBUi7mO6/r4g0aw==",multiaddrs="['']"} 21950
+      Quilibrium_PeerInfo_uncooperativePeerInfo_maxFrame{peerId="QmaffYBcwMgMNz5KhkhpJuWg6kChX7TmdZ8hexz8de8TWA",multiaddrs="['/ip4/70.187.187.239/udp/8336/quic']"} 53799
       ...
+      Quilibrium_TokenInfo_confirmedTokenSupply 90585200000000000
+      Quilibrium_TokenInfo_unconfirmedTokenSupply 90585200000000000
    ```
 
 4. Configure Prometheus to scrape from the exporter.
@@ -108,6 +104,74 @@ Feel free to contribute!
 5. Visualize the metrics in Grafana by connecting them to your Prometheus data source and creating custom dashboards.
 
    Configure Grafana with a Prometheus datasource URL of `http://localhost:9090` and import the JSON located in this repo under `/grafana` for a copy of the Quilibrium Network Dashboard.
+
+
+## Setting up Grafana on a Subdomain (optional)
+
+- Modify your domain DNS to include an A record with the name you prefer and the IP of your server.
+- Uncomment `domain = ` in `grafana.ini` and set it to your full subdomain:
+
+   ```bash
+   sudo nano /etc/grafana/grafana.ini
+   ```
+   # example:
+   ```
+   somesubdomain.yourdomain.tld
+   ```
+   
+
+- Set up the reverse proxy using Nginx:
+
+   # Install and create a site
+   ```bash
+   sudo apt update
+   sudo apt install nginx
+   
+   ```
+   
+   # Add the server block provided in this README
+  ```bash
+  sudo nano /etc/nginx/sites-available/somesubdomain.yourdomain.tld
+  ```
+
+  # Contents of server block:
+  ```
+   server {
+       listen 80;
+       server_name somesubdomain.yourdomain.tld;
+   
+       location / {
+           proxy_pass http://localhost:3000; # Forward requests to Grafana
+           proxy_set_header Host $host; # Pass the host header - important for virtual hosting
+           proxy_set_header X-Real-IP $remote_addr; # Pass the real client IP to Grafana
+           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for; # Manage the forwarded-for header
+           proxy_set_header X-Forwarded-Proto $scheme; # Manage the forwarded-proto header
+       }
+   }
+  ```
+
+   # Enable the site for nginx to serve
+   ```bash
+   sudo ln -s /etc/nginx/sites-available/somesubdomain.yourdomain.tld /etc/nginx/sites-enabled/
+   sudo nginx -t
+   sudo systemctl restart nginx
+   sudo systemctl enable nginx
+   ```
+
+- Allow the site through the firewall for HTTP and HTTPS traffic:
+
+   ```bash
+   sudo ufw allow 80
+   sudo ufw allow 443
+   ```
+
+- Set up SSL with Let's Encrypt:
+
+   ```bash
+   sudo apt install certbot python3-certbot-nginx
+   sudo certbot --nginx -d somesubdomain.yourdomain.tld
+   ```
+
 
 ## Related Quilibrium community developments
 
