@@ -48,6 +48,7 @@ Feel free to contribute!
 
    Add to the bottom or edit an existing entry, and save:
    ```
+   listenGrpcMultiaddr: /ip4/127.0.0.1/tcp/8378
    listenRESTMultiaddr: /ip4/127.0.0.1/tcp/8379
    ```
 
