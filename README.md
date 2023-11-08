@@ -52,6 +52,9 @@ Feel free to contribute!
    listenRESTMultiaddr: /ip4/127.0.0.1/tcp/8379
    ```
 
+   Note: You must open the gRPC if you want REST to work!
+   
+
 3. Start the exporter:
 
    ```bash
@@ -114,7 +117,8 @@ Feel free to contribute!
    ```bash
    sudo nano /etc/grafana/grafana.ini
    ```
-   # example:
+   
+   Example:
    ```
    somesubdomain.yourdomain.tld
    ```
@@ -122,19 +126,19 @@ Feel free to contribute!
 
 - Set up the reverse proxy using Nginx:
 
-   # Install and create a site
+   Install Nginx and create a site:
    ```bash
    sudo apt update
    sudo apt install nginx
    
    ```
    
-   # Add the server block provided in this README
+  Add the server block:
   ```bash
   sudo nano /etc/nginx/sites-available/somesubdomain.yourdomain.tld
   ```
 
-  # Contents of server block:
+  Contents of server block (80  for now, but will be updated by certbot)
   ```
    server {
        listen 80;
@@ -150,7 +154,7 @@ Feel free to contribute!
    }
   ```
 
-   # Enable the site for nginx to serve
+   Enable the site for nginx to serve:
    ```bash
    sudo ln -s /etc/nginx/sites-available/somesubdomain.yourdomain.tld /etc/nginx/sites-enabled/
    sudo nginx -t
@@ -158,7 +162,7 @@ Feel free to contribute!
    sudo systemctl enable nginx
    ```
 
-- Allow the site through the firewall for HTTP and HTTPS traffic:
+- Allow the site through the firewall for HTTP (DCV) and HTTPS traffic:
 
    ```bash
    sudo ufw allow 80
